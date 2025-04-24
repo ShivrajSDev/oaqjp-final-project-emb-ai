@@ -1,19 +1,32 @@
+''' Module designed for handling and running the app's server.
+    This only contains two routes:
+    - The root/index page
+    - The API route that gets called whenever the "Run Sentiment Analysis" button
+      is clicked on the page. This will take the text inputted by the user and
+      send it over to the Emotion Prediction Analysis API and score based on the
+      emotions detected.
+'''
+
+from flask import Flask, request, render_template
 from EmotionDetection.emotion_detection import emotion_detector
-from flask import Flask, request, render_template, json
 
 app = Flask("Emotion Detection")
 
+# The root/index page
 @app.route("/")
 def index():
+    ''' Load the index.html template '''
     return render_template("index.html")
 
-''' This route gets called whenever the user clicks the "Run Sentiment Analysis"
-    button on the webpage. This will take the text inputted by the user and
-    sends it over to the Emotion Prediction Analysis API,before returning back the
-    scores based on the range of emotions detected in the text.
-'''
+# POST API route for hanlding emotion detection analysis
 @app.route("/emotionDetector")
 def emotion_detect():
+    ''' This route gets called whenever the user clicks the "Run Sentiment Analysis"
+        button on the webpage. This will take the text inputted by the user and
+        sends it over to the Emotion Prediction Analysis API, before returning back the
+        scores based on the range of emotions detected in the text.
+    '''
+
     # Retrieve the text from the request arguments for analysis
     text_to_analyze = request.args.get("textToAnalyze")
 
