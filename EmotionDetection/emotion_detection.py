@@ -43,7 +43,7 @@ def emotion_detector(text_to_analyze):
     for key in emotions.keys():
         result[key] = emotions[key]
         if emotions[key] >= dominant_score:
-            dominant_score = emotion_score
+            dominant_score = emotions[key]
             dominant_emotion = key
 
     # Set the dictionary's dominant emotion
