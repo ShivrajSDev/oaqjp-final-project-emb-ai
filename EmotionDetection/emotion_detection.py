@@ -13,24 +13,41 @@ def emotion_detector(text_to_analyze):
     # Make the POST API request
     response = requests.post(url = url, headers = headers, json = my_obj)
 
+    # Initialise dictionary of emotions with default values
+    result = {
+        'joy': None,
+        'anger': None,
+        'disgust': None,
+        'sadness': None,
+        'fear': None,
+        'dominant_emotion': None
+    }
+
+    # Get status code of API request
+    status_code = response.status_code
+
+    # If status code is 400 (e.g. no text provided for analysis),
+    # return the dictionary as-is
+    if status_code == 400:
+        return result
+
     # Retrieve the JSON data from the API response and extract the set of emotions
     response_json = json.loads(response.text)
     emotions = response_json["emotionPredictions"][0]["emotion"]
 
-    # Initialise data, then search through all emotions to determine the dominant
+    # Initialise loop values and search through all emotions to determine the dominant
     # emotion based on their score
     dominant_emotion = 'none'
     dominant_score = 0
 
     for key in emotions.keys():
-        emotion_score = emotions[key]
-        if emotion_score >= dominant_score:
+        result[key] = emotions[key]
+        if emotions[key] >= dominant_score:
             dominant_score = emotion_score
             dominant_emotion = key
 
-    # Make a copy for the emotions set and include the dominant emotion
-    result = emotions.copy()
+    # Set the dictionary's dominant emotion
     result["dominant_emotion"] = dominant_emotion
 
-    # Return the emotion data
+    # Return the dictionary
     return result

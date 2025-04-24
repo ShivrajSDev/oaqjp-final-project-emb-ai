@@ -20,6 +20,11 @@ def emotion_detect():
     # Pass the text over to the emotion detector function and return the response
     response = emotion_detector(text_to_analyze)
 
+    # Return an error message back to the user if invalid text
+    # was provided (e.g. no text given for analysis)
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+
     # Define the message to be displayed to the user
     message = "For the given statement, the system response is "
     message += f"'anger': {response['anger']}, "
